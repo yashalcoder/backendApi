@@ -62,4 +62,3 @@ This is the proper style: long-form, poetic, emotionally precise, and fused from
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-handler = Mangum(app)

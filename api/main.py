@@ -3,13 +3,15 @@ from pydantic import BaseModel
 import openai
 import os
 from dotenv import load_dotenv
-
+from fastapi.middleware.cors import CORSMiddleware
 
 from mangum import Mangum  # Required to run on Vercel
 load_dotenv()
 # FastAPI app setup
 app = FastAPI()
-
+CORSMiddleware=[
+    allowOrigin:['*'],   
+]
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class QueryInput(BaseModel):

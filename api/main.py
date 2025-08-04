@@ -5,13 +5,18 @@ import os
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
-from mangum import Mangum  # Required to run on Vercel
+from mangum import Mangum  
 load_dotenv()
 # FastAPI app setup
 app = FastAPI()
-CORSMiddleware=[
-    allowOrigin:['*'],   
-]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class QueryInput(BaseModel):

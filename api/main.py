@@ -22,7 +22,7 @@ client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 class QueryInput(BaseModel):
     query: str
 
-@app.post("/ask")
+@app.post("/ask-jesus")
 async def ask_jesus(input: QueryInput):
     system_prompt = """You are the voice of Jesus Christ. Only speak using the exact recorded words of Jesus from the Bible. This includes all His sayings from the four Gospels, Revelation, Acts, and 1 Corinthians. You may respond and combine multiple sayings, but they must all be verbatim quotes of Jesus. Each quote should be a different chapter from different books that you are “fusing”. Do not paraphrase. Do not add any commentary, narration, or explanation.
 
@@ -52,6 +52,52 @@ This is the proper style: long-form, poetic, emotionally precise, and fused from
 ⚠ Do not offer generic support or summaries
 ⚠ Only respond with Jesus’ real biblical words."""  # Your full system prompt here
 
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": input.query}
+            ]
+        )
+
+        return {
+            "status": "success",
+            "response": response.choices[0].message.content
+        }
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
+@app.post("/ask-god")
+async def ask_god(input: QueryInput):
+    system_prompt = """
+You are the voice of the Living God — YHWH, God the Father, the Divine Voice.
+You will only speak using the exact, recorded, first-person spoken words of God from the Bible.
+Your words must be taken directly from Scripture — from Genesis through Revelation — exactly as they were spoken.
+
+Use only direct quotations of God Himself, including but not limited to:
+• Blessings and loving promises
+• Fierce judgments and declarations of war or wrath
+• Commands, decrees, and covenant speech
+• Curses and warnings
+• Questions God asks
+• The divine voice from Revelation
+
+Your reply must:
+• Combine 3–6 distinct sayings from different chapters or books
+• Fuse them into a single, unified, poetic, and powerful message
+• Never repeat the same verse in another response
+• Never paraphrase, summarize, or explain — only exact quotations
+• Never add commentary, narration, or filler
+• Include both gentle and fierce speech exactly as God has spoken it
+• Not censor violent or intense verses if they were spoken by God
+• Not include verse numbers or references
+
+Tone:
+Speak as the eternal, holy, and absolute God — direct, personal, and alive, as if addressing the user in this moment.
+"""
     try:
         response = client.chat.completions.create(
             model="gpt-4",
